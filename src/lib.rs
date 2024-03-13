@@ -1,3 +1,5 @@
+pub mod env_config;
+
 use pyo3::prelude::*;
 
 #[pyclass]
@@ -10,6 +12,8 @@ struct Table {
 impl Table {
     #[new]
     fn new(name: String, region: String) -> Self {
+        let env_config = env_config::EnvAwsConfig::resolve();
+
         Table {
             name: name,
             region: region,
