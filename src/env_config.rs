@@ -12,8 +12,6 @@ pub struct EnvAwsConfig {
     pub aws_container_authorization_token: Option<String>,
     pub aws_region: Option<String>,
     pub aws_default_region: Option<String>,
-    pub aws_profile: String,
-    pub aws_default_profile: Option<String>,
     pub aws_shared_credentials_file: Option<String>,
     pub aws_config_file: Option<String>,
     pub aws_ca_bundle: Option<String>,
@@ -33,6 +31,7 @@ pub struct EnvAwsConfig {
     pub aws_sdk_ua_app_id: Option<String>,
     pub aws_ignore_configured_endpoint_urls: bool,
     pub aws_endpoint_url: Option<String>,
+    pub aws_endpoint_url_dynamodb: Option<String>,
     pub aws_disable_request_compression: bool,
     pub aws_request_min_compression_size_bytes: i64,
 }
@@ -50,8 +49,6 @@ impl Default for EnvAwsConfig {
             aws_container_authorization_token: None,
             aws_region: None,
             aws_default_region: None,
-            aws_profile: "default".to_owned(),
-            aws_default_profile: None,
             aws_shared_credentials_file: None,
             aws_config_file: None,
             aws_ca_bundle: None,
@@ -71,6 +68,7 @@ impl Default for EnvAwsConfig {
             aws_sdk_ua_app_id: None,
             aws_ignore_configured_endpoint_urls: false,
             aws_endpoint_url: None,
+            aws_endpoint_url_dynamodb: None,
             aws_disable_request_compression: false,
             aws_request_min_compression_size_bytes: 10240,
         }
@@ -79,7 +77,7 @@ impl Default for EnvAwsConfig {
 
 impl EnvAwsConfig {
     pub fn resolve() -> Self {
-        let config = Config::builder()
+        let config: Config = Config::builder()
             .add_source(
                 config::Environment::default()
                     .try_parsing(true)
